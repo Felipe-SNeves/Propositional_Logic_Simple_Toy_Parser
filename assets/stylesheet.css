@@ -1,0 +1,35 @@
+*,* {
+    margin: 0px;
+    padding: 0px;
+    color: #000000;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.part {
+    margin-left: 75px;
+    margin-right: 75px;
+}
+
+.menu {
+    background-color: #fdcfb5;
+    padding: 5px;
+    position: sticky;
+    top: 0px;
+}
+
+.menu ul {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    list-style: none;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.menu a {
+    text-decoration: none;
+}

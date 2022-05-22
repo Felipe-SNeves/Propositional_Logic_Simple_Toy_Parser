@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="utf-8" />
+        <title>Parser de lógica</title>
+        <link rel="stylesheet" href="./assets/stylesheet.css" />
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="menu">
+                <nav>
+                    <ul>
+                        <li><a href="#part_1">Compiladores</a></li>
+                        <li><a href="#part_2">O computável e o incomputável</a></li>
+                        <li><a href="#part_3">Front-End para lógica proposicional</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="part" id="part_1">
+                <h2 class="title">PARTE 1 - Compiladores</h2>
+                <div class="content">
+                    <h3 class="subtitle">Introdução</h3>
+                    <p>
+                        Nos últimos meses, tenho tido contato, de uma maneira um pouco mais formal, com os conceitos 
+                        introdutórios de construção de compiladores e interpretadores de linguagens de programação. 
+                        Considero esse tema, juntamente com sistemas operacionais, algoritmos e estruturas de dados, 
+                        um dos temas mais intrigantes e interessantes na Ciência da Computação. Sempre tive interesse 
+                        em construir uma pequena linguagem de programação, mas para isso ainda é necessário um longo 
+                        caminho de aprendizado e esforço.
+                    </p>
+                    <p>
+                        Na construção de uma linguagem de programação é necessário que algumas tarefas sejam feitas e 
+                        algumas estruturas sejam criadas. Podemos compreender o processo como um todo da seguinte forma: 
+                        uma linguagem, essencialmente, tem sua estrutura descrita por uma gramática. Essa gramática é 
+                        representada na forma normal de Backus-Naur. Essa forma permite a descrição de gramáticas livres 
+                        de contexto, que é o caso das linguagens de programação. A teoria que embasa esse estruturalismo 
+                        é a Gramática Gerativa de Noam Chomsky.
+                    </p>
+                    <p>
+                        Como ilustrado na Gramática Gerativa, é possível, a partir de uma sentença <i>p</i> qualquer, construir 
+                        uma estrutura de árvore sintática de p, de modo a representar os seus elementos e relacionamentos. 
+                        A construção de um compilador exige a construção de tal estrutura de dados, geralmente denominada de 
+                        Árvore de Análise Sintática ou Árvore Sintática Abstrata (ASA). A fase de construção da árvore é 
+                        denominada Front-End.
+                    </p>
+                </div>
+                <div class="content">
+                    <h3 class="subtitle">Front-End dos compiladores</h3>
+                    <p>
+                        A estrutura do Front-End se resume há três procedimentos ou etapas: análise léxica, análise sintática e 
+                        análise semântica. A análise léxica consiste em, a partir da obtenção da sentença <i>p</i>, aqui entendida como 
+                        uma instrução no paradigma imperativo, obtermos lexemas que representam partes da instrução: 
+                
+                        <em class="spotlight">double univerval_gravitational_constant = 6.67430E-11</em>
+                    </p>
+                    <p>
+                        Por meio da análise léxica, os seguintes lexemas, também denominados como tokens, seriam criados: um 
+                        lexema de tipagem, de valor double, seguido de um token de nome universal_gravitational_constant. Há 
+                        também o lexema numérico com o seu valor igual a Constante Gravitacional Universal e o lexema de operação, 
+                        no caso a atribuição de valor para a variável. Até o presente momento apenas uma coleção de tokens foi 
+                        obtida, porém, nenhuma estrutura que nos permita analisar a sintática da instrução.
+                    </p>
+                    <p>
+                        Para avançarmos para a análise sintática, é preciso termos em mente que a sintaxe da língua é definida de 
+                        acordo com a sua gramática. Para avaliarmos sintaticamente a expressão anterior temos que ter alguma regra 
+                        gramática para declaração de variável com atribuição:
+
+                        <em class="spotlight">Regra gramatical de declaração: TIPO NOME</em>
+                        <em class="spotlight">Regra gramatical de atribuição: NOME OPERADOR VALOR</em>
+                        <em class="spotlight">Regra gramatical de declaração com atribuição: TIPO NOME OPERADOR VALOR</em>
+                    </p>
+                    <p>
+                        Como já possuímos os tokens referentes a cada lexema da sentença, podemos realizar a análise sintática. 
+                        Nessa etapa é construída uma árvore que expressa a regra gramatical descrita pelos relacionamentos entre 
+                        os lexemas:
+
+                        <img src="assets/asa.png" />
+                    </p>
+                    <p>
+                        A partir desse momento, a instrução capturada e enviada para o Front-End é estruturada e pode ser analisada 
+                        com os algoritmos que permitem manipulações em árvores. Se na análise léxica é possível identificar erros de 
+                        digitação de palavras-chave na linguagem, nessa etapa é possível verificar se o código foi escrito corretamente. 
+                        Além de que, em certos casos, é possível até computar determinadas tarefas, como a realização de contas.
+                    </p>
+                    <p>
+                        Toda e qualquer gramática formal pode ser decomposta dessa forma. Desde expressões algébricas até linguagens 
+                        naturais, como o Português. Inclusive, ao utilizar algum editor de texto é comum o mesmo identificar erros na 
+                        escrita, seja em códigos no Atom até em textos no Word. Esses erros são identificados por inconsistências 
+                        gramaticais na geração de tokens e árvores sintáticas.
+                    </p>
+                    <p>
+                        O Front-End do compilador ainda possui a etapa de análise semântica que percorre a ASA em busca de inconsistências 
+                        de comportamento em sentenças sintaticamente corretas, como a utilização de um nome não declarado anteriormente ou 
+                        a atribuição de um valor a um tipo inconsistente. Tais regras semânticas dependem de como a linguagem é especificada. 
+                        Um exemplo é o fato de que a definição de escopo em Java é dado pela delimitação de chaves, enquanto em Python é pela 
+                        indentação. O que se precisa ter em mente é que após essa etapa o código é convertido para uma linguagem intermediária.
+                    </p>
+                </div>
+                <div class="content">
+                    <h3 class="subtitle">Um longo caminho até a execução</h3>
+                    <p>
+                        Embora não seja o foco deste artigo, irei comentar brevemente o que se dá após o Front-end do compilador. Após a passagem 
+                        pela a análise semântica, um código, em uma linguagem intermediária, é gerado. Nesse momento, deve-se questionar o porquê 
+                        de ser uma linguagem intermediária, porém a resposta só será dada mais adiante.
+                    </p>
+                    <p>
+                        Com essa linguagem intermediária é realizada uma série de transformações e otimizações em torno do código intermediário 
+                        obtido. Há um poder intrínseco na utilização de uma representação intermediária. Imagine que tenhamos duas linguagens de 
+                        programação distintas, a saber: A e B. É muito mais interessante apenas especificar o comportamento e a gramática da linguagem 
+                        e construir um Front-End para cada uma delas que despeja como saída um código na mesma linguagem intermediária. Pois, dessa 
+                        maneira, é possível reutilizar o Middle-End de otimização, já que tudo será realizado em uma linguagem só. Em suma, se torna 
+                        simples se derivar novas linguagens de programação. Um exemplo da utilização de linguagens intermediárias é o Low-Level 
+                        Virtual Machine (LLVM). Diversas linguagens de programação, como Python, Kotlin, Haskell, C++, etc. tem seus Front-End's 
+                        gerando código intermediário para ser processado e otimizado pela LLVM.
+                    </p>
+                    <p>
+                        A partir do código intermediário otimizado é possível realizar a tradução para o código de máquina na arquitetura alvo, em quase 
+                        um nível um-para-um. Ainda é possível a realização de micro-otimizações ao trocar determinadas instruções de máquinas por outras 
+                        mais rápidas. Ao final desse processo, um código-objeto não executável é gerado na linguagem da arquitetura alvo.
+                    </p>
+                    <p>
+                        Para que o código-objeto de fato se torne um executável é preciso passar pelo processo de link-edição. Na ligação é estipulado o 
+                        que é aquele código-objeto, se ele é, de fato, um executável ou se ele é uma biblioteca compartilhada. Vamos supor que estamos 
+                        confeccionando um executável para a arquitetura x86 que utiliza um kernel Linux como sistema monitor. Ao realizarmos a linkagem, 
+                        estaríamos adicionando informações ao arquivo ELF de como o processo deverá ser instanciado pelo kernel. A linkagem também pode 
+                        ser dinâmica ou estática, porém isso está fora do escopo do artigo.
+                    </p>
+                </div>
+            </div>
+            <div class="part" id="part_2">
+                <h2 class="title">PARTE 2 - O computável e o incomputável</h2>
+                <div class="content">
+                    <h3 class="subtitle">A lógica proposicional</h3>
+                    <p>
+                        A lógica é uma disciplina que esteve presente desde a alvorada da história. Seu início remonta a afirmação ontológica realizada por 
+                        Parmênides de Eleia: o ser é igual ao ser. Retirando o intuito metafísico de busca da arché, podemos compreender a afirmação como a 
+                        proposição de que p é equivalente a si mesma, ou utilizando uma simbologia matemática, <em class="math">x = x</em>.
+                    </p>
+                    <p>
+                        Porém, o que deve ser comentado aqui é o fato de que a lógica por si só evoluiu durante o percurso dos séculos. Partiu de um sistema 
+                        de regras que permitia, de certa forma, realizar uma espécie de análise hermenêutica da estrutura do discurso, sem se preocupar com sua 
+                        materialidade. Se transformou em uma estrutura algébrica na qual os matemáticos da virada do século XIX para o XX, tentaram utiliza-lá 
+                        para axiomatizar e reduzir toda a matemática para a lógica. E, por fim, mais recentemente, se transformou em um sistema linguístico, muito 
+                        mais preocupado na maneira e na estrutura daquilo que é dito. Não à toa que, Wittgenstein, um proeminente filósofo e lógico da virada do 
+                        século, comentou que entendemos o mundo através da língua, além de tentar reduzir a língua a lógica.
+                    </p>
+                    <p>
+                        A Ciência da Computação emerge da lógica. Irei comentar brevemente sobre esse nascimento na próxima parte, mas antes é necessário comentar 
+                        acerca da lógica de Boole. Associamos, em um primeiro momento, a lógica relacionada à computação à álgebra Booleana. Isso está parcialmente 
+                        correto! De fato, a lógica booleana baseia todo o funcionamento de sistemas digitais. Portas lógicas montadas com chaves, resistores ou até 
+                        condensadas em chips na estrutura de transistores todas são baseadas na lógica booleana. O que é ignorado é que alguns princípios já eram 
+                        conhecidos desde a Antiguidade. Os Princípios de Terceiro Excluído, da Não Contradição e a da Identidade foram definidos pelos filósofos pré 
+                        socráticos e pelos socráticos. A lógica booleana expande e revoluciona o campo, ao explicitar o caráter matemático da disciplina.
+                    </p>
+                    <p>
+                        O caráter matemático, ou melhor, a natureza dedutiva, da lógica não era desconhecida no período entre a Antiguidade e o final da Idade Moderna. 
+                        Os geômetras, matemáticos e a escolástica compreendiam e se utilizavam dessa propriedade. O próprio Kant reconhece a similaridade entre as matérias 
+                        ao separar as "ciências seguras" daquelas que a "razão não pisa em terreno sólido". Mas, com Boole, a lógica vira matemática. As operações recebem 
+                        nomes e propriedades de estruturas algébricas. Se sai de silogismos e quadros relacionais, entra a conjunção, a disjunção, a tautologia, etc.
+                    </p>
+                    <p>
+                        Como comentamos anteriormente, os matemáticos tentaram reduzir a matemática à lógica por volta dos anos 1900. Eles não conseguiram realizar isso, ao 
+                        contrário, demonstraram que era impossível. Mas, o ponto é que, para isso, houve um esforço de compreensão e melhoria da lógica. A lógica booleana, 
+                        também chamada de proposicional, foi expandida com a utilização de dois operadores, além das estruturas clássicas: os quantificadores.
+                    </p>
+                    <p>
+                        Há dois tipos de quantificadores, o universal (∀) e o existencial (∃). O primeiro afirma que uma proposição é, ou válida ou inválida, para qualquer 
+                        elemento X bem definido. O segundo afirma que há ao menos um X bem definido, que satisfaça ou não, a propriedade. O ponto é que, ao inserir esses dois 
+                        quantificadores ao corpo da lógica, fica muito mais simples definir elementos matemáticos como expressões lógicas. Um limite é definido, justamente, 
+                        utilizando lógica: <em class="math">∀ ε > 0, ∃ δ > 0 / ∀ x ∈ Df,  0 < | x - p | < δ => | f(x) - L | < ε".</em>
+                    </p>
+                    <p>
+                        A união da lógica booleana com os quantificadores é denominada Lógica de Primeira Ordem. A computação nasce de um problema de Lógica de Primeira Ordem.
+                    </p>
+                </div>
+                <div class="content">
+                    <h3 class="subtitle">O nascimento da computação: o problema da decisão</h3>
+                    <p>
+                        Computar é algo antigo. Nós computamos, os engenheiros da era vitoriana computavam, os franceses da Revolução computavam, os geômetras medievais computavam 
+                        e os contadores da Acádia computavam. Há uma coisa em comum e uma distinta entre eles e nós: todos computam, mas apenas nós sabemos o que é computar. Embora a 
+                        definição de computação tenha só sido concebida a partir do final dos anos 30, já havia a noção de computação.
+                    </p>
+                    <p>
+                        A pergunta que parece surgir na mente é: <i>“afinal, o que é computação?”</i>. Somos levados a pensar que essa pergunta possui algum tipo de relevância primordial para 
+                        o surgimento da ciência. Ela tem, mas não é o ponto central. Como dito, já havia a noção de computabilidade. Até algoritmos já eram compreendidos como uma sequência 
+                        de passos finitos para obter algum cálculo. Mas, o que de fato, havia um interesse concreto e serviu como pontapé inicial para o desenvolvimento das ciências computacionais 
+                        é um problema que já existia fazia quase 300 anos: o problema da decisão.
+                    </p>
+                    <p>
+                        Imagine que você tenha um enunciado qualquer, vamos supor que seja “para todo número inteiro x, haverá um número inteiro y, tal que, x + y = 0”, em termos lógicos: <em class="math">∀x ∈ℤ, ∃ y ∈ ℤ / x + y = 0.</em>
+                        Na prática enunciamos a propriedade da existência do número oposto de x (-x), e.g. 7 e -7. Sabemos que isso é verdade, na realidade, essa afirmação é até passível de 
+                        demonstração. Apenas para título de curiosidade, a prova é reductio ad absurdum: <br />
+                        (Hipotése) <em class="math">∀x ∈ℤ, ∄ y ∈ ℤ / x + y = 0</em> <br />
+                        <em class="math">x + y = 0 &harr; (x + y) - x = 0 -x &harr; (x - x) + y = -x &harr; 0 + y = -x &harr; y = -x</em>
+                    </p>
+                    <p>
+                        Acontece que, <em class="math">∃ x∈ℤ / x < 0 &rarr; |x| = -x</em>. O que contradiz a hipótese, portanto a afirmação é verdadeira. Perceba que, essencialmente, a prova 
+                        se assemelha a um algoritmo. Existem situações que problemas podem ser resolvidos com, de fato, a adoção de um algoritmo. Afinal, quando estamos nos primeiros anos da 
+                        escola nos é ensinado algoritmos de cálculo de soma, subtração, multiplicação e divisão: “some unidade com unidade, dezena com dezena, transfira uma unidade para a casa 
+                        das dezenas, etc.” Somar, no papel, nada mais é que uma sequência finita de passos para a obtenção de um resultado unívoco: um algoritmo.
+                    </p>
+                    <p>
+                        Agora imagine que damos uma proposição qualquer de primeira ordem p (como a propriedade da existência de número oposto), é possível haver algum algoritmo que permita demonstrar 
+                        se aquela afirmação é válida ou não? Perceba que só queremos saber se é válida ou não: ou sim ou não. Uma decisão. É notável que algumas coisas são computáveis nesse sentido, 
+                        enquanto, outras não parecem ser. Não parecer não é o mesmo de não ser. É justamente nesses momentos que é necessário o rigor matemático. Esse é o problema da decisão.
+                    </p>
+                    <p>
+                        Uma das pessoas que se debruçou sobre esse problema foi Alonzo Church. Church não só tentou abordar esse problema, como também influenciou seus alunos a pensarem nessas questões. 
+                        Um deles foi Alan Turing. Turing conseguiu, também por meio de reductio ad absurdum, demonstrar que não, não existe um algoritmo que, dado um sistema formal qualquer (como a lógica 
+                        de primeira ordem) é possível estabelecer se o enunciado possui uma solução válida ou não. A prova perpassa também pela solução de outro problema, o problema da parada. A redução ao 
+                        absurdo é feita ao supor que uma máquina ficaria resolvendo o algoritmo por um tempo indeterminável ou não. 
+                    </p>
+                    <p>
+                        Essa demonstração é elegante e resolve dois problemas. Mas, Turing foi além, ele definiu o que de fato é computável e ainda montou um sistema formal de sistemas computáveis. Church 
+                        também construiu um sistema formal computável (o menor possível, cálculo-λ). Para fechar de maneira estupenda, ainda há uma argumentação acerca da equivalência de sistemas entre uma 
+                        máquina de Turing e o cálculo-λ. A partir desse momento, a computação passa a andar com suas próprias pernas ao procurar sistemas computáveis que permitam otimização, busca, função e 
+                        decisão. A computação é lógica.
+                    </p>
+                    <p>
+                        Um ponto que deixei para comentar para o final, e que consiste no projeto é: o problema da decisão se centra em lógica de primeira ordem, mas não em lógica proposicional. A lógica proposicional, 
+                        assim como operações aritméticas, admitem criação de algoritmos para determinação de valores. A lógica proposicional é computável.
+                    </p>
+                </div>
+            </div>
+            <div class="part" id="part_3">
+                <h2 class="title">PARTE 3 - Front-End para lógica proposicional</h2>
+                <div class="content">
+                    <h3 class="subtitle">Estrutura do projeto</h3>
+                    <p>
+                        Tendo em vista que a lógica de programação é computável, é perfeitamente possível construir um sistema que resolva problemas de lógica booleana. Como, por exemplo, reduzir expressões, determinar 
+                        o valor lógico da expressão, criar sua tabela verdade, etc. Resolvi construir um parser léxico e um parser semântico para a lógica proposicional. Já aviso de imediato que programei quase que em um 
+                        estado “go horse” e o código resultante é porco (a grande maioria dos algoritmos que tento fazer vive em algum estado granular entre ruim, péssimo e tosco).
+                    </p>
+                    <p>
+                        Irei comentar brevemente acerca do que fiz: o parser léxico (lexicalParser.c) consiste em uma função que recebe a expressão lógica a ser avaliada. A expressão deve conter apenas os operadores de negação, 
+                        conjunção, disjunção e condicional (o bicondicional pode ser construído a partir da conjunção de condicionais), proposições devem ser letrar entre m e u, parênteses são aceitos e cada elemento da sentença 
+                        deve estar separado por um ou mais espaços.
+                    </p>
+                    <p>
+                        Cada elemento da expressão é avaliado isoladamente por meio de expressões regulares e seu respectivo token é criado (lexicalToken.c). São criados tokens do tipo OPERADOR e PROPOSIÇÃO. Os parênteses indicam 
+                        a prioridade das operações, mas, embora haja uma pilha para controlar o balanço deles, não há uma aplicação realmente funcional deles, como será comentado adiante.
+                    </p>
+                    <p>
+                        Esses tokens são passados para o analisador sintático (syntaticParser.c) onde a ASA é construída gerando tokens do tipo EXPRESSÃO. As regras gramaticais que utilizei foram:
+                        <em class="spotlight">EXPRESSÃO &harr; PROPOSIÇÃO (e.g. p)</em>
+                        <em class="spotlight">EXPRESSÃO &harr; OPERADOR PROPOSIÇÃO (e.g. ~ p)</em>
+                        <em class="spotlight">EXPRESSÃO &harr; EXPRESSÃO OPERADOR EXPRESSÃO (e.g. ~ p &rarr; ( q v s ))</em>
+                        
+                        Ao final, a ASA é retornada.
+                    </p>
+                </div>
+                <div class="content">
+                    <h3 class="subtitle">Instalação</h3>
+                    <p>
+                        Para rodar e analisar o projeto basta clonar o <a target="_blank" href="https://github.com/Felipe-SNeves/Propositional_Logic_Simple_Toy_Parser">repositório</a> e realizar 
+                        <em class="spotlight">make all</em>
+                        para compilar os códigos fonte.
+                    </p>
+                </div>
+                <div class="content">
+                    <h3 class="subtitle">Finalização</h3>
+                    <p>
+                        Infelizmente, o projeto apresenta diversos problemas. Praticamente todos são devido ao fato de que não gostaria de gastar muito tempo na implementação do código, e praticamente não projetei nada, apenas fui 
+                        desenhando diagramas e codificando, sem nenhum processo crítico mais acurado aplicado. Alguns problemas notáveis:
+                    </p>
+                    <ol>
+                        <li>Os parênteses são inúteis. Embora tenha uma pilha (stack.h) que poderia ser utilizada para verificar o balanço de abertura e fechamento dos símbolos, não há uma utilidade prática, uma vez que não há uma verificação real disso. A ideia é que os elementos presentes dentro dos parênteses tenham prioridade. De fato, há uma flag de marcação de prioridade na estrutura do token, mas ela não faz nada. O segundo problema decorre daqui;</li>
+                        <li>Na lógica proposicional há a seguinte regra de precedência: negação, conjunção e disjunção seguidos por condicional e bicondicional. Infelizmente, não há nenhuma estrutura que deixe isso implícito, portanto, caso houvesse um cálculo proposicional efetivo (problema 3), tal precedência, assim como a utilização dos parênteses, deveriam ser corrigidas e implementadas;</li>
+                        <li>Não há cálculo proposicional de fato. O que foi construído foi apenas um parser léxico e um parser sintático. Originalmente, gostaria que fosse possível o cálculo proposicional, e até a confecção de tabelas verdade. Porém, como se pode notar, não há a atribuição de valores lógico de verdade para os lexemas, portanto, não há um cálculo proposicional de fato;</li>
+                        <li>Como comentado no problema 3, não há atribuição de valor lógico para a estrutura.</li>
+                    </ol>
+                    <p>
+                        Bom, sugiro que vejam o código e tentem entender (porque eu mesmo já não sei mais o que fiz) o procedimento. Pode ser um exercício interessante refatorar o código tendo em vista a correção dos problemas listados.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
